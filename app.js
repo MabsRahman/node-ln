@@ -1,24 +1,18 @@
-const http = require('http');
+const fs = require('fs').promises;
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/data' && req.method === 'POST') {
-    let body = '';
-
-    req.on('data', chunk => {
-      body += chunk;
-    });
-
-    req.on('end', () => {
-      const data = JSON.parse(body);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Data received', yourData: data }));
-    });
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
+async function addUser(newUser) {
+  let users = [];
+  try {
+    const data = await fs.readFile('users.json', 'utf8');
+    users = JSON.parse(data);
+  } catch (err) {
+    console.log("Creating new users file...");
   }
-});
 
-server.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
-});
+  users.push(newUser);
+
+  await fs.writeFile('users.json', JSON.stringify(users));
+  console.log("User added!");
+}
+
+addUser({ name: "A", age: 28 });
