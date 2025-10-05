@@ -1,12 +1,24 @@
-const fs = require('fs').promises;
+const http = require('http');
 
-async function run() {
-  console.log("Waiting 2 seconds...");
-  await new Promise(resolve => setTimeout(resolve, 2000));
+const server = http.createServer((req, res) => {
+  if (req.url === '/data' && req.method === 'POST') {
+    let body = '';
 
-  const data = await fs.readFile('data.json', 'utf8');
-  const obj = JSON.parse(data);
-  console.log("User:", obj.name);
-}
+    req.on('data', chunk => {
+      body += chunk;
+    });
 
-run();
+    req.on('end', () => {
+      const data = JSON.parse(body);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Data received', yourData: data }));
+    });
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  }
+});
+
+server.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
