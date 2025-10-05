@@ -18,6 +18,7 @@
   "homepage": "https://github.com/MabsRahman/node-ln#readme",
   "description": "",
   "dependencies": {
+    "axios": "^1.12.2",
     "chalk": "^5.6.2",
     "lodash": "^4.17.21"
   }

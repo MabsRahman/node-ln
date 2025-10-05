@@ -1,18 +1,14 @@
-const fs = require('fs').promises;
+const { addUser, listUsers } = require('./userManager');
 
-async function addUser(newUser) {
-  let users = [];
-  try {
-    const data = await fs.readFile('users.json', 'utf8');
-    users = JSON.parse(data);
-  } catch (err) {
-    console.log("Creating new users file...");
-  }
+const args = process.argv.slice(2);
 
-  users.push(newUser);
-
-  await fs.writeFile('users.json', JSON.stringify(users));
-  console.log("User added!");
+switch(args[0]) {
+  case 'add':
+    addUser(args[1], args[2]);
+    break;
+  case 'list':
+    listUsers();
+    break;
+  default:
+    console.log('Commands: add <name> <age> | list');
 }
-
-addUser({ name: "A", age: 28 });
