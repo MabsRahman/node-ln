@@ -1,13 +1,9 @@
 const express = require('express');
 const app = express();
-const userRoutes = require('./routes/users');
+const employeeRoutes = require('./routes/employees');
 
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the API!');
-});
+app.use('/api/employees', employeeRoutes);
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
