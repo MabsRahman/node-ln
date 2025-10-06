@@ -1,14 +1,13 @@
-const { addUser, listUsers } = require('./userManager');
+const express = require('express');
+const app = express();
+const userRoutes = require('./routes/users');
 
-const args = process.argv.slice(2);
+app.use(express.json());
 
-switch(args[0]) {
-  case 'add':
-    addUser(args[1], args[2]);
-    break;
-  case 'list':
-    listUsers();
-    break;
-  default:
-    console.log('Commands: add <name> <age> | list');
-}
+app.use('/api/users', userRoutes);
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the API!');
+});
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
